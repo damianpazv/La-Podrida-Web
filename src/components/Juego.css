@@ -1,0 +1,42 @@
+.container {
+    padding: 15px;
+    background-color: white;
+  }
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    background-color: #daecf2;
+    padding: 10px;
+    border: 1px solid black;
+  }
+  
+  .table {
+    border: 1px solid black;
+    margin-bottom: 20px;
+    background-color: #daecf2;
+  }
+  
+  .row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid black;
+  }
+  
+  .buttons {
+    margin-bottom: 20px;
+  }
+  
+  .modal {
+    position: fixed;
+    top: 20%;
+    left: 30%;
+    padding: 20px;
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 10px;
+  }
+  

@@ -1,0 +1,38 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    padding: 20px;
+  }
+  
+  .subtitulo {
+    font-size: 23px;
+    margin-bottom: 20px;
+  }
+  
+  .input {
+    height: 40px;
+    margin: 12px;
+    border: 1px solid #ccc;
+    padding: 10px;
+  }
+  
+  .input2 {
+    height: 50px;
+    margin: 12px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    width: 300px;
+  }
+  
+  .boton {
+    margin-top: 18px;
+    margin-bottom: 20px;
+  }
+  
+  .jugadores-lista {
+    margin-top: 20px;
+  }
+  
