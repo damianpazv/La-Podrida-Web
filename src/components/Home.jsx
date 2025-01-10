@@ -41,7 +41,7 @@ const Home = () => {
   };
 
   return (
-    <Box sx={{ p: 3, bgcolor: '#f5f5f5', minHeight: '100vh' }}>
+    <Box sx={{ p: 3, bgcolor: '#f5f5f5', minHeight: '86vh' }}>
       {/* Título */}
       <Typography variant="h6" sx={{ mb: 3 }}>
         Ingrese cantidad de jugadores:

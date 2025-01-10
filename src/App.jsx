@@ -48,8 +48,8 @@ const App = () => {
             backgroundColor: '#005267',
             color: 'white',
             textAlign: 'center',
-            padding: '10px',
-            position: 'fixed',
+            padding: '11px',
+            // position: 'fixed',
             width: '100%',
             bottom: 0,
           }}

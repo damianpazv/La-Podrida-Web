@@ -49,7 +49,11 @@ const navigate=useNavigate()
           confirmButtonText:"Salir" // Opcional: para ocultar el botón de confirmación predeterminado
         }).then(() => {
           // Redirigir al home cuando el botón "Salir" sea presionado
-          setJugadores([]);
+          setJugadores(jugadores.map(jugador => ({
+            ...jugador,
+            puntos: 0
+          })));
+          
           navigate("/");  // Asumiendo que usas react-router-dom y que tienes la ruta "/home"
         });
       
