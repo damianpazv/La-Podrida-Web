@@ -12,34 +12,40 @@ const Juego = () => {
     const { cantidadJugadores } = location.state;
   const [ronda, setRonda] = useState(1);
   const [cartas, setCartas] = useState(1);
-  const { jugadores, setJugadores } = useContext(JugadoresContext);
+  const { jugadores, setJugadores ,cantManos,valorBaza} = useContext(JugadoresContext);
   const [modalVisible, setModalVisible] = useState(false);
   const [flagCartas, setFlagCartas] = useState(true);
   const [flagPuntos, setFlagPuntos] = useState(true);
   const [puntosRonda, setPuntosRonda] = useState([]);
   const [camposHabilitados, setCamposHabilitados] = useState(true);
 const navigate=useNavigate()
+
+
+
   const handleSiguienteRonda = () => {
     // Cálculo de las manos (número de rondas) basado en la cantidad de jugadores
-    const manosMax = Math.min(10, Math.max(5, cantidadJugadores));  // Entre 5 y 10 rondas, dependiendo de la cantidad de jugadores.
-  console.log(manosMax,cantidadJugadores);
+    // const manosMax = Math.min(10, Math.max(5, cantidadJugadores));  // Entre 5 y 10 rondas, dependiendo de la cantidad de jugadores.
+    // const manosMax = cantManos; 
     // Calcular cuántas cartas por jugador hay en cada ronda
-    let cartasPorJugador;
-    if (ronda <= 3) {
-      // En las primeras rondas (3 primeras), los jugadores reciben más cartas (4 cartas por jugador).
-      cartasPorJugador = 4;
-    } else if (ronda <= 6) {
-      // En las rondas intermedias, el número de cartas se reduce (3 cartas por jugador).
-      cartasPorJugador = 3;
-    } else {
-      // En las rondas finales, los jugadores reciben menos cartas (2 cartas por jugador).
-      cartasPorJugador = 2;
-    }
+
+console.log(cantManos,ronda,valorBaza);
+
+    // let cartasPorJugador;
+    // if (ronda <= 3) {
+    //   // En las primeras rondas (3 primeras), los jugadores reciben más cartas (4 cartas por jugador).
+    //   cartasPorJugador = 4;
+    // } else if (ronda <= 6) {
+    //   // En las rondas intermedias, el número de cartas se reduce (3 cartas por jugador).
+    //   cartasPorJugador = 3;
+    // } else {
+    //   // En las rondas finales, los jugadores reciben menos cartas (2 cartas por jugador).
+    //   cartasPorJugador = 2;
+    // }
   
     // Comprobar si hemos alcanzado el fin del juego (cuando ya hemos jugado todas las rondas)
-    if (ronda === manosMax) {
+    if (ronda === cantManos) {
         Swal.fire({
-          title: `Ganador/a: ${jugadoresOrdenados[0].nombre}`,
+          title: ` ${jugadoresOrdenados[0].nombre} ha ganado el juego!`,
           imageUrl: "https://i.pinimg.com/originals/5b/7a/ca/5b7aca0fe26f4e6d16d063d725dfb250.gif",
           imageWidth: 400,
           imageHeight: 200,
@@ -66,19 +72,19 @@ const navigate=useNavigate()
     }
   
     // Asegurarse de que el número de cartas por jugador esté correctamente ajustado según la ronda
-    if (cartas < cartasPorJugador) {
-      setCartas((prevCartas) => prevCartas + 1);
-    } else if (cartas === cartasPorJugador) {
-      // Aseguramos que las cartas no se incrementen más de lo necesario
-      setCartas(cartas);
-    }
+    // if (cartas < cartasPorJugador) {
+    //   setCartas((prevCartas) => prevCartas + 1);
+    // } else if (cartas === cartasPorJugador) {
+    //   // Aseguramos que las cartas no se incrementen más de lo necesario
+    //   setCartas(cartas);
+    // }
   
-    // Si el número de cartas ha alcanzado el valor correspondiente para esta ronda, no se hace nada más
-    if (cartas === cartasPorJugador) {
-      setFlagCartas(false); // Puede usar esto para evitar que se incremente el número de cartas después de alcanzarlo
-    } else {
-      setFlagCartas(true);
-    }
+    // // Si el número de cartas ha alcanzado el valor correspondiente para esta ronda, no se hace nada más
+    // if (cartas === cartasPorJugador) {
+    //   setFlagCartas(false); // Puede usar esto para evitar que se incremente el número de cartas después de alcanzarlo
+    // } else {
+    //   setFlagCartas(true);
+    // }
   
     // Habilitamos los campos para la siguiente ronda
     setCamposHabilitados(true);
@@ -93,11 +99,22 @@ const navigate=useNavigate()
       const jugadoresActualizados = prevJugadores.map((jugador) => {
         const punto = puntosRonda.find((p) => p.nombre === jugador.nombre);
         if (punto) {
-          let puntosActualizados = jugador.puntos + 2 * parseInt(punto.bazas, 10);
-          if (punto.cumplio === true) {
+
+
+          
+          if (punto.bazas ===punto.bazasConseguidas) {
+            let puntosActualizados = jugador.puntos + valorBaza * parseInt(punto.bazas, 10);
             puntosActualizados += 10;
+            return { ...jugador, puntos: puntosActualizados };
           }
-          return { ...jugador, puntos: puntosActualizados };
+
+          else{
+            const puntos=valorBaza * parseInt(punto.bazasConseguidas, 10);
+            const diferencia = Math.abs(punto.bazas - punto.bazasConseguidas);
+            let puntosActualizados = jugador.puntos + puntos - valorBaza * diferencia;
+            return { ...jugador, puntos: puntosActualizados };
+          }
+       
         }
         return jugador; // Si no hay puntos para este jugador, lo dejamos tal cual
       });
@@ -140,16 +157,28 @@ const navigate=useNavigate()
       setPuntosRonda([{ nombre, bazas: text }, ...puntosRonda]);
     }
   };
+  const handleBazasConseguidasChange = (text, nombre) => {
+    const index = puntosRonda.findIndex((item) => item.nombre === nombre);
+
+    if (index !== -1) {
+      const updatedPuntosRonda = [...puntosRonda];
+      updatedPuntosRonda[index].bazasConseguidas = text;
+      setPuntosRonda(updatedPuntosRonda);
+    } else {
+      setPuntosRonda([{ nombre, bazasConseguidas: text }, ...puntosRonda]);
+    }
+  };
 
   const jugadoresOrdenados = [...jugadores].sort((a, b) => b.puntos - a.puntos);
 
   return (
-    <Box sx={{ p: 3, bgcolor: "#f5f5f5", minHeight: "100vh" }}>
+    <Box sx={{ p: 3, bgcolor: "#f5f5f5",  }}>
       {/* Header */}
-      <Box sx={{ mb: 4, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <Typography variant="h5">Mano: {ronda}</Typography>
-        <Typography variant="h5">Cartas: {cartas}</Typography>
-      </Box>
+      {/* <Box sx={{ mb: 4, display: "flex", justifyContent: "space-between", alignItems: "center" }}> */}
+
+        <Typography className='text-center' variant="h6">MANO {ronda}</Typography>
+        {/* <Typography variant="h5">Cartas: {cartas}</Typography> */}
+      {/* </Box> */}
 
       {/* Table */}
       <Paper sx={{ mb: 4, p: 2, boxShadow: 3 }}>
@@ -164,9 +193,10 @@ const navigate=useNavigate()
           }}
         >
        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
-  <Box sx={{ flex: 1, textAlign: 'center' }}>Jugador</Box>
-  <Box sx={{ flex: 1, textAlign: 'center' }}>Cumplió</Box>
-  <Box sx={{ flex: 1, textAlign: 'center' }}>Bazas</Box>
+  <Box sx={{ flex: 1, textAlign: 'center' ,fontSize:"12px"}}>JUGADOR</Box>
+  {/* <Box sx={{ flex: 1, textAlign: 'center',fontSize:"10px" }}>CUMPLIO</Box> */}
+  <Box sx={{ flex: 1, textAlign: 'center' ,fontSize:"12px"}}>BAZAS APOSTADAS</Box>
+  <Box sx={{ flex: 1, textAlign: 'center' ,fontSize:"12px"}}>BAZAS CONSEGUIDAS</Box>
 </Box>
 
         </Box>
@@ -183,7 +213,7 @@ const navigate=useNavigate()
     }}
   >
     <Box sx={{ flex: 1, textAlign: 'center' }}>{item.nombre}</Box> {/* Centra el nombre del jugador */}
-    <FormControlLabel
+    {/* <FormControlLabel
       control={
         <Checkbox
           checked={puntosRonda.some((punto) => punto.nombre === item.nombre && punto.cumplio === true)}
@@ -191,23 +221,39 @@ const navigate=useNavigate()
           disabled={!camposHabilitados}
         />
       }
-      label="Si/No"
-      sx={{ textAlign: 'center' }} // Centra el label de "Cumplió"
-    />
+      label="SI"
+      sx={{ textAlign: 'center' ,marginLeft:2}} // Centra el label de "Cumplió"
+    /> */}
     <TextField
       variant="outlined"
       size="small"
       type="number"
-      placeholder="Bazas"
-      fullWidth
+      placeholder="Ingrese"
+      
       sx={{
         flex: 1,
-        mx: 1,
+    marginLeft:2,
         textAlign: 'center', // Centra el texto del campo de Bazas
       }}
       onChange={(e) => handleBazasChange(e.target.value, item.nombre)}
       disabled={!camposHabilitados}
       value={puntosRonda.find((punto) => punto.nombre === item.nombre)?.bazas || ''}
+    />
+
+<TextField
+      variant="outlined"
+      size="small"
+      type="number"
+      placeholder="Ingrese"
+      
+      sx={{
+        flex: 1,
+    marginLeft:2,
+        textAlign: 'center', // Centra el texto del campo de Bazas
+      }}
+      onChange={(e) => handleBazasConseguidasChange(e.target.value, item.nombre)}
+      disabled={!camposHabilitados}
+      value={puntosRonda.find((punto) => punto.nombre === item.nombre)?.bazasConseguidas || ''}
     />
   </Box>
 ))}

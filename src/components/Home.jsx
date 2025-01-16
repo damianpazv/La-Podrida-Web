@@ -5,20 +5,22 @@ import { useNavigate } from "react-router-dom";
 import { TextField, Button, Typography, Box } from '@mui/material';
 
 const Home = () => {
-  const [cantJugadores, setCantJugadores] = useState("");
-  const { jugadores, setJugadores } = useContext(JugadoresContext);
+  const [cantJugadores, setCantJugadores] = useState(3);
+  const { jugadores, setJugadores,cantManos,setCantManos,valorBaza,setValorBaza } = useContext(JugadoresContext);
 
   const navigate=useNavigate();
 
   const resetApp = () => {
     setJugadores([]);
-    setCantJugadores("");
+    setCantJugadores(3);
+    setCantManos(3);
+    setValorBaza(2);
   };
 
   const handleNombreChange = (text, index) => {
     setJugadores((prevJugadores) => {
       const nuevosJugadores = [...prevJugadores];
-      nuevosJugadores[index].nombre = text;
+      nuevosJugadores[index].nombre = text.toUpperCase();
       nuevosJugadores[index].puntos = 0;
       return nuevosJugadores;
     });
@@ -43,20 +45,51 @@ const Home = () => {
   return (
     <Box sx={{ p: 3, bgcolor: '#f5f5f5', minHeight: '86vh' }}>
       {/* Título */}
-      <Typography variant="h6" sx={{ mb: 3 }}>
-        Ingrese cantidad de jugadores:
-      </Typography>
 
-      {/* Input para la cantidad de jugadores */}
-      <TextField
-        variant="outlined"
-        label="Cantidad de jugadores"
-        type="number"
-        fullWidth
-        value={cantJugadores}
-        onChange={(e) => setCantJugadores(e.target.value)}
-        sx={{ mb: 2 }}
-      />
+
+      <Box
+  sx={{
+    display: "flex",
+    gap: 2, // Espaciado entre los inputs
+    alignItems: "center", // Alinea los inputs verticalmente al centro (opcional)
+    mb: 2, // Margen inferior del contenedor
+  }}
+>
+ 
+
+  <TextField
+    variant="outlined"
+    label="Jugadores"
+    type="number"
+    value={cantJugadores}
+    onChange={(e) => setCantJugadores(e.target.value)}
+    sx={{ flex: 1 }} // Los inputs compartirán el espacio disponible
+  />
+
+
+
+  <TextField
+    variant="outlined"
+    label="Nro Manos"
+    type="number"
+    value={cantManos}
+    onChange={(e) => setCantManos(parseInt(e.target.value,10) )}
+    sx={{ flex: 1 }}
+  />
+ 
+
+
+  <TextField
+    variant="outlined"
+    label="Valor baza"
+    type="number"
+    value={valorBaza}
+    onChange={(e) => setValorBaza(parseInt(e.target.value,10))}
+    sx={{ flex: 1 }}
+  />
+
+</Box>
+
 
       {/* Botones */}
       <Box sx={{ display: 'flex', gap: 2, mb: 4 }}>

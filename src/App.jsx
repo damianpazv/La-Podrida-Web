@@ -9,58 +9,56 @@ const App = () => {
   return (
     <JugadoresProvider>
       <Router>
-        <header
-          style={{
-            backgroundColor: '#005267',
-            padding: '10px',
-            textAlign: 'center',
-            color: 'white',
-          }}
-        >
-          <h1 style={{ fontSize: '24px', margin: 0 }}>La Podrida</h1>
-        </header>
-
-        {/* <nav
+        <div
           style={{
             display: 'flex',
-            justifyContent: 'center',
-            gap: '10px',
-            backgroundColor: '#004050',
-            padding: '10px',
+            flexDirection: 'column',
+            minHeight: '100vh',
+           
+            backgroundColor:'#f5f5f5' // El contenedor ocupa toda la altura de la ventana
           }}
         >
-          <Link to="/" style={{ color: 'white', textDecoration: 'none' }}>
-            Home
-          </Link>
-          <Link to="/juego" style={{ color: 'white', textDecoration: 'none' }}>
-            Juego
-          </Link>
-        </nav> */}
+          <header
+            style={{
+              backgroundColor: '#005267',
+              padding: '10px',
+              textAlign: 'center',
+              color: 'white',
+            }}
+          >
+            <h1 style={{ fontSize: '24px', margin: 0 }}>La Podrida</h1>
+          </header>
 
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/juego" element={<Juego />} />
-        </Routes>
+          <main
+            style={{
+              flex: 1, // El contenido principal ocupa el espacio restante
+              padding: '10px',
+            }}
+          >
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/juego" element={<Juego />} />
+            </Routes>
+          </main>
 
-        {/* Footer con el texto "Desarrollado por Ing Damian Paz" */}
-        <footer
-          style={{
-            backgroundColor: '#005267',
-            color: 'white',
-            textAlign: 'center',
-            padding: '11px',
-            // position: 'fixed',
-            width: '100%',
-            bottom: 0,
-          }}
-        >
-          <p style={{ margin: 0 }}>© Desarrollado por Ing Damian Paz</p>
-        </footer>
+          <footer
+            style={{
+              backgroundColor: '#005267',
+              color: 'white',
+              textAlign: 'center',
+              padding: '8px',
+              width: '100%',
+            }}
+          >
+            <p style={{ margin: 0 }}>© Desarrollado por Ing Damian Paz</p>
+          </footer>
+        </div>
       </Router>
     </JugadoresProvider>
   );
 };
 
 export default App;
+
 
 
